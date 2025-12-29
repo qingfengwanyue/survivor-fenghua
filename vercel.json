@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "middleware.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    // 1. 静态文件路由（优先级高）
+    {
+      "src": "/translate-fh.js",
+      "dest": "/public/translate-fh.js"
+    },
+    
+    // 2. API代理路由
+    {
+      "src": "/apis/(.*)",
+      "dest": "https://yloves.top:8282/$1",
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    
+    // 3. 静态资源重定向到COS
+    {
+      "src": "/sio-cdn/icons/(.*)",
+      "status": 301,
+      "headers": {
+        "Location": "https://survivor-qing-1258241359.cos.ap-guangzhou.myqcloud.com/icons/$1"
+      }
+    },
+    
+    // 4. 主代理路由（最后匹配）
+    {
+      "src": "/(.*)",
+      "dest": "https://sio-tools.vercel.app/$1",
+      "headers": {
+        "Host": "sio-tools.vercel.app",
+        "X-Real-IP": "$remote_addr",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+      }
+    }
+  ]
+}
