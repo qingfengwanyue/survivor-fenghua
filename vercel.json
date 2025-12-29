@@ -13,11 +13,25 @@
     },
     {
       "src": "/apis/(.*)",
-      "dest": "https://yloves.top:8282/$1"
+      "dest": "https://yloves.top:8282/$1",
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "src": "/sio-cdn/icons/(.*)",
+      "status": 301,
+      "headers": {
+        "Location": "https://survivor-qing-1258241359.cos.ap-guangzhou.myqcloud.com/icons/$1"
+      }
     },
     {
       "src": "/(.*)",
-      "dest": "https://sio-tools.vercel.app/$1"
+      "dest": "https://sio-tools.vercel.app/$1",
+      "headers": {
+        "Host": "sio-tools.vercel.app",
+        "X-Forwarded-Host": "survivor-fh.top"
+      }
     }
   ]
 }
